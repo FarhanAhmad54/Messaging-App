@@ -1,3 +1,8 @@
-export type Profile = { id: string; username: string | null; display_name: string | null; avatar_url: string | null; last_seen_at: string | null };
-export type Conversation = { id: string; type: 'direct' | 'group'; name: string | null; avatar_url: string | null; updated_at: string; last_message?: Message | null; unread_count?: number };
-export type Message = { id: string; client_id: string; conversation_id: string; sender_id: string; body: string | null; message_type: 'text' | 'image' | 'video' | 'file' | 'audio'; status: 'sent' | 'delivered' | 'read' | 'failed'; created_at: string; edited_at: string | null; deleted_at: string | null; sender?: Profile };
+import type { Tables } from './database.types';
+
+export type Profile = Tables<'profiles'>;
+export type Conversation = Tables<'conversations'> & { last_message?: Message | null; unread_count?: number };
+export type Message = Tables<'messages'> & { sender?: Profile };
+export type Attachment = Tables<'attachments'>;
+export type MessageReaction = Tables<'message_reactions'>;
+export type MessageReceipt = Tables<'message_receipts'>;
