@@ -2,17 +2,18 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { SessionProvider, useSession } from '../lib/session';
-import { clearAppBadge, registerForPushNotifications, startNotificationRouting } from '../lib/notifications';
+import { registerForPushNotifications, startNotificationRouting, clearAppBadge } from '../lib/notifications';
 import { flushQueue } from '../lib/offlineQueue';
 import { colors } from '../lib/theme';
+import { ConnectionBanner } from '../components/ConnectionBanner';
 
 function AppRuntime() {
   const { user } = useSession();
   useEffect(() => {
     if (!user) return;
     registerForPushNotifications(user.id).catch(() => {});
-    void flushQueue();
-    void clearAppBadge();
+    clearAppBadge().catch(() => {});
+    flushQueue().catch(() => {});
     const subscription = startNotificationRouting();
     return () => subscription.remove();
   }, [user]);
@@ -20,5 +21,5 @@ function AppRuntime() {
 }
 
 export default function RootLayout() {
-  return <SessionProvider><AppRuntime/><StatusBar style="light"/><Stack screenOptions={{headerShown:false,contentStyle:{backgroundColor:colors.ink},animation:'fade'}}/></SessionProvider>;
+  return <SessionProvider><AppRuntime/><ConnectionBanner/><StatusBar style="light"/><Stack screenOptions={{headerShown:false,contentStyle:{backgroundColor:colors.ink},animation:'fade'}}/></SessionProvider>;
 }
