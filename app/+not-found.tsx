@@ -1,0 +1,9 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors, aurora } from '../lib/theme';
+
+export default function NotFound(){
+ return <View style={s.root}><View style={s.glow}><LinearGradient colors={[...aurora.bluePurple, colors.auroraSea]} style={s.gradient}/></View><Text style={s.code}>404</Text><Text style={s.title}>Page not found</Text><Text style={s.body}>The conversation or destination you requested is no longer available.</Text><Pressable onPress={()=>router.replace('/chats')} style={s.button}><LinearGradient colors={aurora.bluePurple} style={s.buttonGradient}><Text style={s.buttonText}>Back to messages</Text></LinearGradient></Pressable></View>;
+}
+const s=StyleSheet.create({root:{flex:1,backgroundColor:colors.ink,justifyContent:'center',padding:28},glow:{position:'absolute',top:80,right:-120,width:360,height:360,opacity:.22,borderRadius:180,overflow:'hidden'},gradient:{width:'100%',height:'100%',borderRadius:180},code:{color:colors.auroraSea,fontSize:12,fontWeight:'900',letterSpacing:3},title:{color:colors.paper,fontSize:34,fontWeight:'800',marginTop:10},body:{color:colors.paperMuted,fontSize:15,lineHeight:22,maxWidth:330,marginTop:10},button:{height:52,borderRadius:14,overflow:'hidden',marginTop:28,maxWidth:220},buttonGradient:{flex:1,alignItems:'center',justifyContent:'center'},buttonText:{color:'#fff',fontWeight:'800'}});
