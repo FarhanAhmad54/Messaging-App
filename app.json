@@ -1,14 +1,16 @@
 {
   "expo": {
-    "name": "Messaging",
+    "name": "Aurora Messages",
     "slug": "messaging-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "messaging",
+    "scheme": "auroramessages",
     "userInterfaceStyle": "dark",
     "plugins": ["expo-router", "expo-notifications", "expo-secure-store"],
     "experiments": {"typedRoutes": true},
-    "ios": {"supportsTablet": true, "bundleIdentifier": "com.farhan.messaging"},
-    "android": {"package": "com.farhan.messaging"}
+    "ios": {"supportsTablet": true, "bundleIdentifier": "com.farhan.auroramessages"},
+    "android": {"package": "com.farhan.auroramessages"},
+    "web": {"bundler": "metro"},
+    "extra": {"appVariant": "production"}
   }
 }
