@@ -2,7 +2,8 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { SessionProvider, useSession } from '../lib/session';
-import { registerForPushNotifications, startNotificationRouting } from '../lib/notifications';
+import { clearAppBadge, registerForPushNotifications, startNotificationRouting } from '../lib/notifications';
+import { flushQueue } from '../lib/offlineQueue';
 import { colors } from '../lib/theme';
 
 function AppRuntime() {
@@ -10,6 +11,8 @@ function AppRuntime() {
   useEffect(() => {
     if (!user) return;
     registerForPushNotifications(user.id).catch(() => {});
+    void flushQueue();
+    void clearAppBadge();
     const subscription = startNotificationRouting();
     return () => subscription.remove();
   }, [user]);
