@@ -9,11 +9,15 @@ export type Database = {
       attachments: { Row:{id:string;message_id:string;storage_path:string;mime_type:string;file_name:string|null;file_size:number|null;width:number|null;height:number|null;duration_ms:number|null;created_at:string}; Insert:Partial<Database['public']['Tables']['attachments']['Row']>&{message_id:string;storage_path:string;mime_type:string}; Update:Partial<Database['public']['Tables']['attachments']['Row']> };
       message_reactions: { Row:{message_id:string;user_id:string;reaction:string;created_at:string}; Insert:{message_id:string;user_id:string;reaction:string;created_at?:string}; Update:Partial<Database['public']['Tables']['message_reactions']['Row']> };
       message_receipts: { Row:{message_id:string;user_id:string;delivered_at:string|null;read_at:string|null}; Insert:{message_id:string;user_id:string;delivered_at?:string|null;read_at?:string|null}; Update:Partial<Database['public']['Tables']['message_receipts']['Row']> };
-      devices: { Row:{id:string;user_id:string;expo_push_token:string;platform:string;enabled:boolean;created_at:string;updated_at:string}; Insert:Partial<Database['public']['Tables']['devices']['Row']>&{user_id:string;expo_push_token:string;platform:string}; Update:Partial<Database['public']['Tables']['devices']['Row']> };
+      devices: { Row:{id:string;user_id:string;expo_push_token:string;platform:string;enabled:boolean;last_seen_at:string|null;created_at:string;updated_at:string}; Insert:Partial<Database['public']['Tables']['devices']['Row']>&{user_id:string;expo_push_token:string;platform:string}; Update:Partial<Database['public']['Tables']['devices']['Row']> };
       notification_preferences: { Row:{user_id:string;messages:boolean;mentions:boolean;group_messages:boolean;sound:boolean;badge:boolean;updated_at:string}; Insert:Partial<Database['public']['Tables']['notification_preferences']['Row']>&{user_id:string}; Update:Partial<Database['public']['Tables']['notification_preferences']['Row']> };
       user_blocks: { Row:{blocker_id:string;blocked_id:string;created_at:string}; Insert:{blocker_id:string;blocked_id:string;created_at?:string}; Update:Partial<Database['public']['Tables']['user_blocks']['Row']> };
     };
-    Functions: { get_or_create_direct_conversation:{Args:{other_user_id:string};Returns:string} };
+    Functions: {
+      get_or_create_direct_conversation:{Args:{other_user_id:string};Returns:string};
+      create_group_conversation:{Args:{p_name:string;p_member_ids:string[]};Returns:string};
+      mark_conversation_read:{Args:{p_conversation_id:string};Returns:null};
+    };
     Enums:{conversation_type:'direct'|'group';message_status:'sent'|'delivered'|'read';message_type:'text'|'image'|'video'|'file'|'audio'};
   };
 };
