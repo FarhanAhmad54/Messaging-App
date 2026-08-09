@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Messaging App",
+    "name": "Messaging",
     "slug": "messaging-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "messagingapp",
+    "scheme": "messaging",
     "userInterfaceStyle": "dark",
-    "plugins": ["expo-router", "expo-notifications"],
+    "plugins": ["expo-router", "expo-notifications", "expo-secure-store"],
     "experiments": {"typedRoutes": true},
-    "ios": {"supportsTablet": true, "bundleIdentifier": "com.farhan.messagingapp"},
-    "android": {"package": "com.farhan.messagingapp"}
+    "ios": {"supportsTablet": true, "bundleIdentifier": "com.farhan.messaging"},
+    "android": {"package": "com.farhan.messaging"}
   }
 }
