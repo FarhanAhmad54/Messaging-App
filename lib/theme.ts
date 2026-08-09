@@ -1,17 +1,42 @@
 import { StyleSheet } from 'react-native';
 
+/**
+ * Aurora Editorial theme.
+ * Dark ink surfaces carry a restrained blue → purple → emerald/sea-green
+ * spectrum. Gradients are applied selectively by UI surfaces; text and body
+ * copy remain neutral for readability.
+ */
 export const colors = {
-  ink: '#090909',
-  paper: '#F2EFE8',
-  paperMuted: '#C9C4BA',
-  panel: '#121212',
-  panel2: '#191919',
-  line: '#2B2B2B',
-  white: '#FAFAF7',
-  muted: '#8D8A83',
-  accent: '#E8E1D3',
-  danger: '#D96C5F',
-  success: '#9EB89C',
+  ink: '#070A0F',
+  inkSoft: '#0B1018',
+  paper: '#F1F4F2',
+  paperMuted: '#C2C9CC',
+  panel: '#0E141D',
+  panel2: '#131B27',
+  line: '#25303A',
+  white: '#FAFCFB',
+  muted: '#87939B',
+  accent: '#B8C5FF',
+  accentBlue: '#4F8CFF',
+  accentPurple: '#8B5CF6',
+  accentViolet: '#A855F7',
+  accentGreen: '#35D39A',
+  accentSea: '#43C7A4',
+  accentMint: '#79E2C0',
+  auroraBlue: '#2563EB',
+  auroraPurple: '#7C3AED',
+  auroraGreen: '#10B981',
+  auroraSea: '#2DD4BF',
+  danger: '#FF6B7A',
+  success: '#58D6A7',
+};
+
+export const aurora = {
+  /** Ordered stops for any gradient-capable surface. */
+  stops: [colors.auroraBlue, colors.auroraPurple, colors.auroraGreen, colors.auroraSea],
+  bluePurple: [colors.auroraBlue, colors.auroraPurple],
+  purpleGreen: [colors.auroraPurple, colors.auroraGreen],
+  greenSea: [colors.auroraGreen, colors.auroraSea],
 };
 
 export const spacing = { xs: 6, sm: 10, md: 16, lg: 24, xl: 32, xxl: 48 };
@@ -23,4 +48,5 @@ export const editorial = StyleSheet.create({
   label: { color: colors.muted, fontSize: 11, fontWeight: '700', letterSpacing: 1.6, textTransform: 'uppercase' },
   body: { color: colors.paperMuted, fontSize: 15, lineHeight: 22 },
   hairline: { height: StyleSheet.hairlineWidth, backgroundColor: colors.line },
+  accentText: { color: colors.accentMint },
 });
