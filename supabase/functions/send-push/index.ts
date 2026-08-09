@@ -1,0 +1,22 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+Deno.serve(async (req) => {
+  if (req.method !== 'POST') return new Response('Method Not Allowed',{status:405});
+  const secret=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const url=Deno.env.get('SUPABASE_URL');
+  if(!secret||!url)return new Response('Server configuration error',{status:500});
+  const auth=req.headers.get('authorization');
+  if(!auth)return new Response('Unauthorized',{status:401});
+  const supabase=createClient(url,secret,{global:{headers:{Authorization:auth}}});
+  const {messageId}=await req.json();
+  if(!messageId)return new Response('messageId required',{status:400});
+  const {data:message,error}=await supabase.from('messages').select('id,conversation_id,sender_id,body').eq('id',messageId).single();
+  if(error||!message)return new Response('Message not found',{status:404});
+  const {data:members}=await supabase.from('conversation_members').select('user_id,muted').eq('conversation_id',message.conversation_id).neq('user_id',message.sender_id);
+  const recipientIds=(members??[]).filter((m)=>!m.muted).map((m)=>m.user_id);
+  if(!recipientIds.length)return Response.json({sent:0});
+  const {data:devices}=await supabase.from('devices').select('id,user_id,expo_push_token').in('user_id',recipientIds).eq('enabled',true);
+  const messages=(devices??[]).map((d)=>({to:d.expo_push_token,title:'New message',body:message.body??'New message',sound:'default',data:{type:'direct_message',conversationId:message.conversation_id,messageId:message.id},channelId:'messages'}));
+  if(!messages.length)return Response.json({sent:0});
+  const response=await fetch('https://exp.host/--/api/v2/push/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(messages)});
+  return new Response(await response.text(),{status:response.status,headers:{'Content-Type':'application/json'}});
+});
