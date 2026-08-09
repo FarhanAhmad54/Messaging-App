@@ -2,6 +2,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { router } from 'expo-router';
 import { supabase } from './supabase';
 
 Notifications.setNotificationHandler({
@@ -35,4 +36,14 @@ export async function registerForPushNotifications(userId: string) {
     });
   }
   return token;
+}
+
+export function startNotificationRouting() {
+  const open = (response: Notifications.NotificationResponse) => {
+    const data = response.notification.request.content.data as Record<string, unknown> | undefined;
+    const conversationId = typeof data?.conversation_id === 'string' ? data.conversation_id : null;
+    if (conversationId) router.push({ pathname: '/chat/[id]', params: { id: conversationId } });
+  };
+  Notifications.getLastNotificationResponseAsync().then(response => { if (response) open(response); }).catch(() => {});
+  return Notifications.addNotificationResponseReceivedListener(open);
 }
