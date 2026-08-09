@@ -1,0 +1,22 @@
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+export type Database = {
+  public: {
+    Tables: {
+      profiles: { Row: { id:string; username:string|null; display_name:string|null; avatar_url:string|null; bio:string|null; last_seen_at:string|null; is_online:boolean; created_at:string; updated_at:string }; Insert: Partial<Omit<Database['public']['Tables']['profiles']['Row'],'id'>> & { id:string }; Update: Partial<Database['public']['Tables']['profiles']['Row']> };
+      conversations: { Row:{id:string;type:'direct'|'group';name:string|null;avatar_url:string|null;created_by:string|null;created_at:string;updated_at:string;last_message_at:string|null}; Insert:Partial<Database['public']['Tables']['conversations']['Row']>&{type:'direct'|'group'}; Update:Partial<Database['public']['Tables']['conversations']['Row']> };
+      conversation_members: { Row:{conversation_id:string;user_id:string;role:string;joined_at:string;muted:boolean;archived:boolean;last_read_at:string|null}; Insert:Partial<Database['public']['Tables']['conversation_members']['Row']>&{conversation_id:string;user_id:string}; Update:Partial<Database['public']['Tables']['conversation_members']['Row']> };
+      messages: { Row:{id:string;client_id:string;conversation_id:string;sender_id:string;body:string|null;message_type:'text'|'image'|'video'|'file'|'audio';status:'sent'|'delivered'|'read';reply_to_id:string|null;created_at:string;edited_at:string|null;deleted_at:string|null}; Insert:Partial<Database['public']['Tables']['messages']['Row']>&{client_id:string;conversation_id:string;sender_id:string}; Update:Partial<Database['public']['Tables']['messages']['Row']> };
+      attachments: { Row:{id:string;message_id:string;storage_path:string;mime_type:string;file_name:string|null;file_size:number|null;width:number|null;height:number|null;duration_ms:number|null;created_at:string}; Insert:Partial<Database['public']['Tables']['attachments']['Row']>&{message_id:string;storage_path:string;mime_type:string}; Update:Partial<Database['public']['Tables']['attachments']['Row']> };
+      message_reactions: { Row:{message_id:string;user_id:string;reaction:string;created_at:string}; Insert:{message_id:string;user_id:string;reaction:string;created_at?:string}; Update:Partial<Database['public']['Tables']['message_reactions']['Row']> };
+      message_receipts: { Row:{message_id:string;user_id:string;delivered_at:string|null;read_at:string|null}; Insert:{message_id:string;user_id:string;delivered_at?:string|null;read_at?:string|null}; Update:Partial<Database['public']['Tables']['message_receipts']['Row']> };
+      devices: { Row:{id:string;user_id:string;expo_push_token:string;platform:string;enabled:boolean;created_at:string;updated_at:string}; Insert:Partial<Database['public']['Tables']['devices']['Row']>&{user_id:string;expo_push_token:string;platform:string}; Update:Partial<Database['public']['Tables']['devices']['Row']> };
+      notification_preferences: { Row:{user_id:string;messages:boolean;mentions:boolean;group_messages:boolean;sound:boolean;badge:boolean;updated_at:string}; Insert:Partial<Database['public']['Tables']['notification_preferences']['Row']>&{user_id:string}; Update:Partial<Database['public']['Tables']['notification_preferences']['Row']> };
+      user_blocks: { Row:{blocker_id:string;blocked_id:string;created_at:string}; Insert:{blocker_id:string;blocked_id:string;created_at?:string}; Update:Partial<Database['public']['Tables']['user_blocks']['Row']> };
+    };
+    Functions: { get_or_create_direct_conversation:{Args:{other_user_id:string};Returns:string} };
+    Enums:{conversation_type:'direct'|'group';message_status:'sent'|'delivered'|'read';message_type:'text'|'image'|'video'|'file'|'audio'};
+  };
+};
+export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
+export type TablesInsert<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Insert'];
+export type TablesUpdate<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Update'];
